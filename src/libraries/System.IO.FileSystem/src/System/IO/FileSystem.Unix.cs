@@ -21,30 +21,31 @@ namespace System.IO
             }
 
             // Copy the contents of the file from the source to the destination, creating the destination in the process
-            using (var src = new FileStream(sourceFullPath, FileMode.Open, FileAccess.Read, FileShare.Read, DefaultBufferSize, FileOptions.None))
+            // Source file locking is controlled by the PAL.  (Result is positive if copying failed, negative
+            // if locking failed.)
+            int result = Interop.Sys.CopyFile(sourceFullPath, destFullPath, overwrite ? 1 : 0);
+
+            if (result != 0)
             {
-                int result = Interop.Sys.CopyFile(src.SafeFileHandle, sourceFullPath, destFullPath, overwrite ? 1 : 0);
+                Interop.ErrorInfo error = Interop.Sys.GetLastErrorInfo();
 
-                if (result < 0)
-                {
-                    Interop.ErrorInfo error = Interop.Sys.GetLastErrorInfo();
+                // If we fail to open the file due to a path not existing, we need to know whether to blame
+                // the file itself or its directory.  If we're creating the file, then we blame the directory,
+                // otherwise we blame the file.
+                //
+                // When opening, we need to align with Windows, which considers a missing path to be
+                // FileNotFound only if the containing directory exists.
 
-                    // If we fail to open the file due to a path not existing, we need to know whether to blame
-                    // the file itself or its directory.  If we're creating the file, then we blame the directory,
-                    // otherwise we blame the file.
-                    //
-                    // When opening, we need to align with Windows, which considers a missing path to be
-                    // FileNotFound only if the containing directory exists.
+                bool isDirectory = (error.Error == Interop.Error.ENOENT) &&
+                    (overwrite || !DirectoryExists(Path.GetDirectoryName(
+                                        Path.TrimEndingDirectorySeparator(
+                                            result < 0 ? sourceFullPath : destFullPath))!));
 
-                    bool isDirectory = (error.Error == Interop.Error.ENOENT) &&
-                        (overwrite || !DirectoryExists(Path.GetDirectoryName(Path.TrimEndingDirectorySeparator(destFullPath))!));
-
-                    Interop.CheckIo(
-                        error.Error,
-                        destFullPath,
-                        isDirectory,
-                        errorRewriter: e => (e.Error == Interop.Error.EISDIR) ? Interop.Error.EACCES.Info() : e);
-                }
+                Interop.CheckIo(
+                    error.Error,
+                    destFullPath,
+                    isDirectory,
+                    errorRewriter: e => (e.Error == Interop.Error.EISDIR) ? Interop.Error.EACCES.Info() : e);
             }
         }
 
