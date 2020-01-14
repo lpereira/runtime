@@ -1211,7 +1211,7 @@ enum CloneFileResult
     CLONEFILE_ERROR
 };
 
-static enum CloneFileResult CopyFile_CloneFile(const char* srcPath, const char* destPath, struct stat_ *sourceStat)
+static enum CloneFileResult CopyFile_CloneFile(const char* srcPath, const char* destPath, struct stat_ *sourceStat, int32_t overwrite)
 {
     struct stat_ destStat;
     int ret;
@@ -1414,7 +1414,7 @@ int32_t SystemNative_CopyFile(const char* srcPath, const char* destPath, int32_t
 #if HAVE_CLONEFILE
     // If clonefile() is available (macOS), try to use it, as filesystems might implement better
     // file copying strategies (e.g.  CoW).
-    switch (CopyFile_CloneFile(srcPath, destPath, &sourceStat))
+    switch (CopyFile_CloneFile(srcPath, destPath, &sourceStat, overwrite))
     {
         case CLONEFILE_SUCCESS:
             copied = true;
