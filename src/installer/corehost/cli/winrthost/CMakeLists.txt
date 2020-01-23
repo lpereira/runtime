@@ -14,9 +14,6 @@ set (SOURCES
     winrthost.cpp
     ../redirected_error_writer.cpp
     ../fxr_resolver.cpp
-    ../../common/trace.cpp
-    ../../common/utils.cpp
-    ../fxr/fx_ver.cpp
 )
 
 if(WIN32)
@@ -33,7 +30,7 @@ if (WIN32 AND (CLR_CMAKE_HOST_ARCH_ARM OR CLR_CMAKE_HOST_ARCH_ARM64))
     target_link_libraries(winrthost Advapi32.lib Ole32.lib OleAut32.lib)
 endif()
 
-target_link_libraries(winrthost RuntimeObject.lib)
+target_link_libraries(winrthost RuntimeObject.lib common hostcommon)
 
 install(TARGETS winrthost DESTINATION corehost)
 install_symbols(winrthost corehost)
