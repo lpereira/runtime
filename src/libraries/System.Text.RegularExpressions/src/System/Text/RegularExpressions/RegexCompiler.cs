@@ -431,68 +431,35 @@ namespace System.Text.RegularExpressions
         /// <summary>A macro for _ilg.Emit(OpCodes.Call, mt).</summary>
         protected void Call(MethodInfo mt) => _ilg!.Emit(OpCodes.Call, mt);
 
-        /// <summary>A macro for _ilg.Emit(OpCodes.Brfalse) (long form).</summary>
-        private void BrfalseFar(Label l) => _ilg!.Emit(OpCodes.Brfalse, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Brtrue) (long form).</summary>
-        private void BrtrueFar(Label l) => _ilg!.Emit(OpCodes.Brtrue, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Br) (long form).</summary>
-        private void BrFar(Label l) => _ilg!.Emit(OpCodes.Br, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Ble) (long form).</summary>
-        private void BleFar(Label l) => _ilg!.Emit(OpCodes.Ble, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Blt) (long form).</summary>
-        private void BltFar(Label l) => _ilg!.Emit(OpCodes.Blt, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Blt_Un) (long form).</summary>
-        private void BltUnFar(Label l) => _ilg!.Emit(OpCodes.Blt_Un, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Bge) (long form).</summary>
-        private void BgeFar(Label l) => _ilg!.Emit(OpCodes.Bge, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Bge_Un) (long form).</summary>
-        private void BgeUnFar(Label l) => _ilg!.Emit(OpCodes.Bge_Un, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Bgt) (long form).</summary>
-        private void BgtFar(Label l) => _ilg!.Emit(OpCodes.Bgt, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Bne) (long form).</summary>
-        private void BneFar(Label l) => _ilg!.Emit(OpCodes.Bne_Un, l);
-
-        /// <summary>A macro for _ilg.Emit(OpCodes.Beq) (long form).</summary>
-        private void BeqFar(Label l) => _ilg!.Emit(OpCodes.Beq, l);
-
         /// <summary>A macro for _ilg.Emit(OpCodes.Brfalse_S) (short jump).</summary>
-        private void Brfalse(Label l) => _ilg!.Emit(OpCodes.Brfalse_S, l);
+        private void Brfalse(Label l) => _ilg!.Emit(OpCodes.Brfalse_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Brtrue_S) (short jump).</summary>
-        private void Brtrue(Label l) => _ilg!.Emit(OpCodes.Brtrue_S, l);
+        private void Brtrue(Label l) => _ilg!.Emit(OpCodes.Brtrue_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Br_S) (short jump).</summary>
-        private void Br(Label l) => _ilg!.Emit(OpCodes.Br_S, l);
+        private void Br(Label l) => _ilg!.Emit(OpCodes.Br_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Ble_S) (short jump).</summary>
-        private void Ble(Label l) => _ilg!.Emit(OpCodes.Ble_S, l);
+        private void Ble(Label l) => _ilg!.Emit(OpCodes.Ble_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Blt_S) (short jump).</summary>
-        private void Blt(Label l) => _ilg!.Emit(OpCodes.Blt_S, l);
+        private void Blt(Label l) => _ilg!.Emit(OpCodes.Blt_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Bge_S) (short jump).</summary>
-        private void Bge(Label l) => _ilg!.Emit(OpCodes.Bge_S, l);
+        private void Bge(Label l) => _ilg!.Emit(OpCodes.Bge_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Bgt_S) (short jump).</summary>
-        private void Bgt(Label l) => _ilg!.Emit(OpCodes.Bgt_S, l);
+        private void Bgt(Label l) => _ilg!.Emit(OpCodes.Bgt_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Bgt_Un_S) (short jump).</summary>
-        private void BgtUn(Label l) => _ilg!.Emit(OpCodes.Bgt_Un_S, l);
+        private void BgtUn(Label l) => _ilg!.Emit(OpCodes.Bgt_Un_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Bne_S) (short jump).</summary>
-        private void Bne(Label l) => _ilg!.Emit(OpCodes.Bne_Un_S, l);
+        private void Bne(Label l) => _ilg!.Emit(OpCodes.Bne_Un_S, l, true);
 
         /// <summary>A macro for _ilg.Emit(OpCodes.Beq_S) (short jump).</summary>
-        private void Beq(Label l) => _ilg!.Emit(OpCodes.Beq_S, l);
+        private void Beq(Label l) => _ilg!.Emit(OpCodes.Beq_S, l, true);
 
         /// <summary>A macro for the Ldlen instruction.</summary>
         private void Ldlen() => _ilg!.Emit(OpCodes.Ldlen);
@@ -712,7 +679,7 @@ namespace System.Text.RegularExpressions
         private void DoPush() => StelemI4();
 
         /// <summary>Jump to the backtracking switch.</summary>
-        private void Back() => BrFar(_backtrack);
+        private void Back() => Br(_backtrack);
 
         /// <summary>
         /// Branch to the MSIL corresponding to the regex code at i
@@ -742,16 +709,16 @@ namespace System.Text.RegularExpressions
                 Ble(l1);
                 Ldloc(_runstackposLocal!);
                 Ldc(_trackcount * 3);
-                BgtFar(_labels![i]);
+                Bgt(_labels![i]);
                 MarkLabel(l1);
                 ReadyPushTrack();
                 Ldc(AddGoto(i));
                 DoPush();
-                BrFar(_backtrack);
+                Br(_backtrack);
             }
             else
             {
-                BrFar(_labels![i]);
+                Br(_labels![i]);
             }
         }
 
@@ -765,7 +732,7 @@ namespace System.Text.RegularExpressions
         private Label AdvanceLabel() => _labels![NextCodepos()];
 
         /// <summary>Goto the next (forward) operation.</summary>
-        private void Advance() => BrFar(AdvanceLabel());
+        private void Advance() => Br(AdvanceLabel());
 
         /// <summary>Sets the culture local to CultureInfo.CurrentCulture.</summary>
         private void InitLocalCultureInfo()
@@ -1045,7 +1012,7 @@ namespace System.Text.RegularExpressions
                         Ldloc(_runtextposLocal);
                         Ldthisfld(s_runtextstartField);
                         Ble(l1);
-                        BrFar(returnFalse);
+                        Br(returnFalse);
                         MarkLabel(l1);
                     }
 
@@ -1110,7 +1077,7 @@ namespace System.Text.RegularExpressions
                         Ldc('\n');
                         Beq(l2);
                         MarkLabel(l1);
-                        BrFar(returnFalse);
+                        Br(returnFalse);
                         MarkLabel(l2);
                     }
 
@@ -1120,7 +1087,7 @@ namespace System.Text.RegularExpressions
                         Ldloc(_runtextposLocal);
                         Ldthisfld(s_runtextstartField);
                         Bge(l1);
-                        BrFar(returnFalse);
+                        Br(returnFalse);
                         MarkLabel(l1);
                     }
 
@@ -1204,11 +1171,11 @@ namespace System.Text.RegularExpressions
                 Ldloc(limitLocal);
                 if (!_code.RightToLeft)
                 {
-                    BgeFar(returnFalse);
+                    Bge(returnFalse);
                 }
                 else
                 {
-                    BltFar(returnFalse);
+                    Blt(returnFalse);
                 }
 
                 // ch = runtext[runtextpos];
@@ -1223,7 +1190,7 @@ namespace System.Text.RegularExpressions
                 Ldc(chLast);
 
                 Label lPartialMatch = DefineLabel();
-                BeqFar(lPartialMatch);
+                Beq(lPartialMatch);
 
                 // ch -= lowAscii;
                 // if (ch > (highAscii - lowAscii)) goto defaultAdvance;
@@ -1283,7 +1250,7 @@ namespace System.Text.RegularExpressions
                     }
                     Ldc(offset);
                 }
-                BrFar(lAdvance);
+                Br(lAdvance);
 
                 // Emit a check for each character from the next to last down to the first.
                 MarkLabel(lPartialMatch);
@@ -1312,7 +1279,7 @@ namespace System.Text.RegularExpressions
 
                     if (prevLabelOffset == _boyerMoorePrefix.Positive[charindex])
                     {
-                        BneFar(prevLabel);
+                        Bne(prevLabel);
                     }
                     else
                     {
@@ -1325,7 +1292,7 @@ namespace System.Text.RegularExpressions
                         prevLabelOffset = _boyerMoorePrefix.Positive[charindex];
                         MarkLabel(prevLabel);
                         Ldc(prevLabelOffset);
-                        BrFar(lAdvance);
+                        Br(lAdvance);
 
                         MarkLabel(lNext);
                     }
@@ -1374,7 +1341,7 @@ namespace System.Text.RegularExpressions
                 {
                     Ldloc(cLocal);
                     Ldc(0);
-                    BleFar(l4);
+                    Ble(l4);
                 }
 
                 MarkLabel(l1);
@@ -1388,7 +1355,7 @@ namespace System.Text.RegularExpressions
                 if (!RegexCharClass.IsSingleton(_leadingCharClasses[0].CharClass))
                 {
                     EmitMatchCharacterClass(_leadingCharClasses[0].CharClass, _leadingCharClasses[0].CaseInsensitive, charInClassLocal);
-                    BrtrueFar(l2);
+                    Brtrue(l2);
                 }
                 else
                 {
@@ -1400,17 +1367,10 @@ namespace System.Text.RegularExpressions
 
                 Ldloc(cLocal);
                 Ldc(0);
-                if (!RegexCharClass.IsSingleton(_leadingCharClasses[0].CharClass))
-                {
-                    BgtFar(l1);
-                }
-                else
-                {
-                    Bgt(l1);
-                }
+                Bgt(l1);
 
                 Ldc(0);
-                BrFar(l3);
+                Br(l3);
 
                 MarkLabel(l2);
 
@@ -1449,7 +1409,7 @@ namespace System.Text.RegularExpressions
                         Sub();
                     }
                     Ldloc(_runtextposLocal);
-                    BleFar(returnFalse);
+                    Ble(returnFalse);
                 }
 
                 LocalBuilder charInClassLocal = _temp1Local;
@@ -1487,7 +1447,7 @@ namespace System.Text.RegularExpressions
                     // for (int i = 0;
                     Ldc(0);
                     Stloc(iLocal);
-                    BrFar(checkSpanLengthLabel);
+                    Br(checkSpanLengthLabel);
                     MarkLabel(loopBody);
                 }
 
@@ -1543,7 +1503,7 @@ namespace System.Text.RegularExpressions
                     }
                     Stloc(iLocal);
                     Ldc(0);
-                    BltFar(returnFalse);
+                    Blt(returnFalse);
 
                     // if (i >= textSpan.Length - (_leadingCharClasses.Length - 1)) goto returnFalse;
                     if (_leadingCharClasses.Length > 1)
@@ -1554,7 +1514,7 @@ namespace System.Text.RegularExpressions
                         Ldc(_leadingCharClasses.Length - 1);
                         Sub();
                         Ldloc(iLocal);
-                        BleFar(returnFalse);
+                        Ble(returnFalse);
                     }
                 }
 
@@ -1576,7 +1536,7 @@ namespace System.Text.RegularExpressions
                     Call(s_spanGetItemMethod);
                     LdindU2();
                     EmitMatchCharacterClass(_leadingCharClasses[charClassIndex].CharClass, _leadingCharClasses[charClassIndex].CaseInsensitive, charInClassLocal);
-                    BrfalseFar(charNotInClassLabel);
+                    Brfalse(charNotInClassLabel);
                 }
 
                 // this.runtextpos = runtextpos + i;
@@ -1609,11 +1569,11 @@ namespace System.Text.RegularExpressions
                         Ldc(_leadingCharClasses.Length - 1);
                         Sub();
                     }
-                    BltFar(loopBody);
+                    Blt(loopBody);
 
                     // runtextpos = runtextend;
                     // return false;
-                    BrFar(returnFalse);
+                    Br(returnFalse);
                 }
             }
         }
@@ -1980,7 +1940,7 @@ namespace System.Text.RegularExpressions
                 EmitSum(textSpanPos + requiredLength - 1, dynamicRequiredLength);
                 Ldloca(textSpanLocal);
                 Call(s_spanGetLengthMethod);
-                BgeUnFar(doneLabel);
+                BgeUn(doneLabel);
             }
 
             // Emits code to get ref textSpan[textSpanPos]
@@ -2084,7 +2044,7 @@ namespace System.Text.RegularExpressions
                     // matter what the value is after the branch, whatever follows the alternate
                     // will see the same textSpanPos.
                     TransferTextSpanPosToRunTextPos();
-                    BrFar(doneAlternate);
+                    Br(doneAlternate);
 
                     // Reset state for next branch and loop around to generate it.  This includes
                     // setting runtextpos back to what it was at the beginning of the alternation,
@@ -2115,7 +2075,7 @@ namespace System.Text.RegularExpressions
 
                     MarkLabel(uncapture);
                     EmitUncaptureUntil(startingCrawlpos);
-                    BrFar(doneLabel);
+                    Br(doneLabel);
                 }
                 else
                 {
@@ -2233,7 +2193,7 @@ namespace System.Text.RegularExpressions
 
                 // If the generated code ends up here, it matched the lookahead, which actually
                 // means failure for a _negative_ lookahead, so we need to jump to the original done.
-                BrFar(originalDoneLabel);
+                Br(originalDoneLabel);
 
                 // Failures (success for a negative lookahead) jump here.
                 MarkLabel(doneLabel);
@@ -2338,7 +2298,7 @@ namespace System.Text.RegularExpressions
                         break;
 
                     case RegexNode.Nothing:
-                        BrFar(doneLabel);
+                        Br(doneLabel);
                         break;
 
                     case RegexNode.Empty:
@@ -2376,7 +2336,7 @@ namespace System.Text.RegularExpressions
                         LocalBuilder setScratchLocal = RentInt32Local();
                         EmitMatchCharacterClass(node.Str!, IsCaseInsensitive(node), setScratchLocal);
                         ReturnInt32Local(setScratchLocal);
-                        BrfalseFar(doneLabel);
+                        Brfalse(doneLabel);
                         break;
 
                     case RegexNode.One:
@@ -2385,14 +2345,14 @@ namespace System.Text.RegularExpressions
                     case RegexNode.Oneloopatomic:
                         if (IsCaseInsensitive(node)) CallToLower();
                         Ldc(node.Ch);
-                        BneFar(doneLabel);
+                        Bne(doneLabel);
                         break;
 
                     default:
                         Debug.Assert(node.Type == RegexNode.Notone || node.Type == RegexNode.Notonelazy || node.Type == RegexNode.Notoneloop || node.Type == RegexNode.Notoneloopatomic);
                         if (IsCaseInsensitive(node)) CallToLower();
                         Ldc(node.Ch);
-                        BeqFar(doneLabel);
+                        Beq(doneLabel);
                         break;
                 }
 
@@ -2416,23 +2376,23 @@ namespace System.Text.RegularExpressions
                 {
                     case RegexNode.Boundary:
                         Callvirt(s_isBoundaryMethod);
-                        BrfalseFar(doneLabel);
+                        Brfalse(doneLabel);
                         break;
 
                     case RegexNode.NonBoundary:
                         Callvirt(s_isBoundaryMethod);
-                        BrtrueFar(doneLabel);
+                        Brtrue(doneLabel);
                         break;
 
                     case RegexNode.ECMABoundary:
                         Callvirt(s_isECMABoundaryMethod);
-                        BrfalseFar(doneLabel);
+                        Brfalse(doneLabel);
                         break;
 
                     default:
                         Debug.Assert(node.Type == RegexNode.NonECMABoundary);
                         Callvirt(s_isECMABoundaryMethod);
-                        BrtrueFar(doneLabel);
+                        Brtrue(doneLabel);
                         break;
                 }
             }
@@ -2449,14 +2409,14 @@ namespace System.Text.RegularExpressions
                         {
                             // If we statically know we've already matched part of the regex, there's no way we're at the
                             // beginning or start, as we've already progressed past it.
-                            BrFar(doneLabel);
+                            Br(doneLabel);
                         }
                         else
                         {
                             // if (runtextpos > this.runtextbeg/start) goto doneLabel;
                             Ldloc(runtextposLocal);
                             Ldthisfld(node.Type == RegexNode.Beginning ? s_runtextbegField : s_runtextstartField);
-                            BneFar(doneLabel);
+                            Bne(doneLabel);
                         }
                         break;
 
@@ -2469,7 +2429,7 @@ namespace System.Text.RegularExpressions
                             Call(s_spanGetItemMethod);
                             LdindU2();
                             Ldc('\n');
-                            BneFar(doneLabel);
+                            Bne(doneLabel);
                         }
                         else
                         {
@@ -2485,7 +2445,7 @@ namespace System.Text.RegularExpressions
                             Sub();
                             Callvirt(s_stringGetCharsMethod);
                             Ldc('\n');
-                            BneFar(doneLabel);
+                            Bne(doneLabel);
                             MarkLabel(success);
                         }
                         break;
@@ -2495,7 +2455,7 @@ namespace System.Text.RegularExpressions
                         Ldc(textSpanPos);
                         Ldloca(textSpanLocal);
                         Call(s_spanGetLengthMethod);
-                        BltUnFar(doneLabel);
+                        BltUn(doneLabel);
                         break;
 
                     case RegexNode.EndZ:
@@ -2505,7 +2465,7 @@ namespace System.Text.RegularExpressions
                         Call(s_spanGetLengthMethod);
                         Ldc(1);
                         Sub();
-                        BltFar(doneLabel);
+                        Blt(doneLabel);
                         goto case RegexNode.Eol;
 
                     case RegexNode.Eol:
@@ -2515,13 +2475,13 @@ namespace System.Text.RegularExpressions
                             Ldc(textSpanPos);
                             Ldloca(textSpanLocal);
                             Call(s_spanGetLengthMethod);
-                            BgeUnFar(success);
+                            BgeUn(success);
                             Ldloca(textSpanLocal);
                             Ldc(textSpanPos);
                             Call(s_spanGetItemMethod);
                             LdindU2();
                             Ldc('\n');
-                            BneFar(doneLabel);
+                            Bne(doneLabel);
                             MarkLabel(success);
                         }
                         break;
@@ -2553,7 +2513,7 @@ namespace System.Text.RegularExpressions
                     Ldstr(node.Str);
                     Call(s_stringAsSpanMethod);
                     Call(s_spanStartsWith);
-                    BrfalseFar(doneLabel);
+                    Brfalse(doneLabel);
                     textSpanPos += node.Str.Length;
                     return;
                 }
@@ -2583,7 +2543,7 @@ namespace System.Text.RegularExpressions
                             Unaligned(1);
                             LdindI8();
                             LdcI8(MemoryMarshal.Read<long>(MemoryMarshal.AsBytes(s)));
-                            BneFar(doneLabel);
+                            Bne(doneLabel);
                             textSpanPos += CharsPerInt64;
                             s = s.Slice(CharsPerInt64);
                         }
@@ -2598,7 +2558,7 @@ namespace System.Text.RegularExpressions
                         Unaligned(1);
                         LdindI4();
                         Ldc(MemoryMarshal.Read<int>(MemoryMarshal.AsBytes(s)));
-                        BneFar(doneLabel);
+                        Bne(doneLabel);
                         textSpanPos += CharsPerInt32;
                         s = s.Slice(CharsPerInt32);
                     }
@@ -2613,7 +2573,7 @@ namespace System.Text.RegularExpressions
                     LdindU2();
                     if (caseInsensitive) CallToLower();
                     Ldc(s[i]);
-                    BneFar(doneLabel);
+                    Bne(doneLabel);
                 }
             }
 
@@ -2670,7 +2630,7 @@ namespace System.Text.RegularExpressions
 
                     Ldc(0);
                     Stloc(iterationLocal);
-                    BrFar(conditionLabel);
+                    Br(conditionLabel);
 
                     MarkLabel(bodyLabel);
                     EmitTimeoutCheck();
@@ -2692,7 +2652,7 @@ namespace System.Text.RegularExpressions
                     Ldloc(iterationLocal);
                     Ldloca(spanLocal);
                     Call(s_spanGetLengthMethod);
-                    BltFar(bodyLabel);
+                    Blt(bodyLabel);
 
                     ReturnReadOnlySpanCharLocal(spanLocal);
                     ReturnInt32Local(iterationLocal);
@@ -2732,7 +2692,7 @@ namespace System.Text.RegularExpressions
 
                 Ldc(0);
                 Stloc(iterationLocal);
-                BrFar(conditionLabel);
+                Br(conditionLabel);
 
                 MarkLabel(bodyLabel);
                 EmitTimeoutCheck();
@@ -2750,7 +2710,7 @@ namespace System.Text.RegularExpressions
                 MarkLabel(conditionLabel);
                 Ldloc(iterationLocal);
                 Ldc(iterations);
-                BltFar(bodyLabel);
+                Blt(bodyLabel);
 
                 ReturnInt32Local(iterationLocal);
             }
@@ -2817,7 +2777,7 @@ namespace System.Text.RegularExpressions
                     // if (i != -1) goto doneLabel;
                     Ldloc(iterationLocal);
                     Ldc(-1);
-                    BneFar(doneLabel);
+                    Bne(doneLabel);
 
                     // i = textSpan.Length - textSpanPos;
                     Ldloca(textSpanLocal);
@@ -2867,7 +2827,7 @@ namespace System.Text.RegularExpressions
                     // if (i != -1) goto doneLabel;
                     Ldloc(iterationLocal);
                     Ldc(-1);
-                    BneFar(doneLabel);
+                    Bne(doneLabel);
 
                     // i = textSpan.Length - textSpanPos;
                     Ldloca(textSpanLocal);
@@ -2904,7 +2864,7 @@ namespace System.Text.RegularExpressions
                     // int i = 0;
                     Ldc(0);
                     Stloc(iterationLocal);
-                    BrFar(conditionLabel);
+                    Br(conditionLabel);
 
                     // Body:
                     // TimeoutCheck();
@@ -2915,7 +2875,7 @@ namespace System.Text.RegularExpressions
                     Ldloc(iterationLocal);
                     Ldloca(textSpanLocal);
                     Call(s_spanGetLengthMethod);
-                    BgeUnFar(doneLabel);
+                    BgeUn(doneLabel);
 
                     // if (textSpan[i] != ch) goto Done;
                     Ldloca(textSpanLocal);
@@ -2927,18 +2887,18 @@ namespace System.Text.RegularExpressions
                         case RegexNode.Oneloopatomic:
                             if (IsCaseInsensitive(node)) CallToLower();
                             Ldc(node.Ch);
-                            BneFar(doneLabel);
+                            Bne(doneLabel);
                             break;
                         case RegexNode.Notoneloopatomic:
                             if (IsCaseInsensitive(node)) CallToLower();
                             Ldc(node.Ch);
-                            BeqFar(doneLabel);
+                            Beq(doneLabel);
                             break;
                         case RegexNode.Setloopatomic:
                             LocalBuilder setScratchLocal = RentInt32Local();
                             EmitMatchCharacterClass(node.Str!, IsCaseInsensitive(node), setScratchLocal);
                             ReturnInt32Local(setScratchLocal);
-                            BrfalseFar(doneLabel);
+                            Brfalse(doneLabel);
                             break;
                     }
 
@@ -2954,11 +2914,11 @@ namespace System.Text.RegularExpressions
                     {
                         Ldloc(iterationLocal);
                         Ldc(maxIterations);
-                        BltFar(bodyLabel);
+                        Blt(bodyLabel);
                     }
                     else
                     {
-                        BrFar(bodyLabel);
+                        Br(bodyLabel);
                     }
                 }
 
@@ -2971,7 +2931,7 @@ namespace System.Text.RegularExpressions
                 {
                     Ldloc(iterationLocal);
                     Ldc(minIterations);
-                    BltFar(doneLabel);
+                    Blt(doneLabel);
                 }
 
                 // Now that we've completed our optional iterations, advance the text span
@@ -3007,7 +2967,7 @@ namespace System.Text.RegularExpressions
                 Ldc(textSpanPos);
                 Ldloca(textSpanLocal);
                 Call(s_spanGetLengthMethod);
-                BgeUnFar(skipUpdatesLabel);
+                BgeUn(skipUpdatesLabel);
 
                 // if (textSpan[textSpanPos] != ch) goto skipUpdatesLabel;
                 Ldloca(textSpanLocal);
@@ -3019,18 +2979,18 @@ namespace System.Text.RegularExpressions
                     case RegexNode.Oneloopatomic:
                         if (IsCaseInsensitive(node)) CallToLower();
                         Ldc(node.Ch);
-                        BneFar(skipUpdatesLabel);
+                        Bne(skipUpdatesLabel);
                         break;
                     case RegexNode.Notoneloopatomic:
                         if (IsCaseInsensitive(node)) CallToLower();
                         Ldc(node.Ch);
-                        BeqFar(skipUpdatesLabel);
+                        Beq(skipUpdatesLabel);
                         break;
                     case RegexNode.Setloopatomic:
                         LocalBuilder setScratchLocal = RentInt32Local();
                         EmitMatchCharacterClass(node.Str!, IsCaseInsensitive(node), setScratchLocal);
                         ReturnInt32Local(setScratchLocal);
-                        BrfalseFar(skipUpdatesLabel);
+                        Brfalse(skipUpdatesLabel);
                         break;
                 }
 
@@ -3085,7 +3045,7 @@ namespace System.Text.RegularExpressions
                 // int i = 0;
                 Ldc(0);
                 Stloc(iterationLocal);
-                BrFar(conditionLabel);
+                Br(conditionLabel);
 
                 // Body:
                 // TimeoutCheck();
@@ -3117,7 +3077,7 @@ namespace System.Text.RegularExpressions
                 Ldloc(startingRunTextPosLocal);
                 Stloc(runtextposLocal);
                 ReturnInt32Local(startingRunTextPosLocal);
-                BrFar(doneLabel);
+                Br(doneLabel);
 
                 // Successful iteration.
                 MarkLabel(successfulIterationLabel);
@@ -3134,11 +3094,11 @@ namespace System.Text.RegularExpressions
                 {
                     Ldloc(iterationLocal);
                     Ldc(maxIterations);
-                    BltFar(bodyLabel);
+                    Blt(bodyLabel);
                 }
                 else
                 {
-                    BrFar(bodyLabel);
+                    Br(bodyLabel);
                 }
 
                 // Done:
@@ -3150,7 +3110,7 @@ namespace System.Text.RegularExpressions
                 {
                     Ldloc(iterationLocal);
                     Ldc(minIterations);
-                    BltFar(doneLabel);
+                    Blt(doneLabel);
                 }
 
                 ReturnInt32Local(iterationLocal);
@@ -3294,7 +3254,7 @@ namespace System.Text.RegularExpressions
                     Ldthis();
                     Ldc(Operand(0));
                     Callvirt(s_isMatchedMethod);
-                    BrfalseFar(_backtrack);
+                    Brfalse(_backtrack);
                     break;
 
                 case RegexCode.Lazybranch:
@@ -3378,7 +3338,7 @@ namespace System.Text.RegularExpressions
                         Ldthis();
                         Ldc(Operand(1));
                         Callvirt(s_isMatchedMethod);
-                        BrfalseFar(_backtrack);
+                        Brfalse(_backtrack);
                     }
 
                     PopStack();
@@ -3941,7 +3901,7 @@ namespace System.Text.RegularExpressions
                         Ble(l1);
                         Leftchar();
                         Ldc('\n');
-                        BneFar(_backtrack);
+                        Bne(_backtrack);
                         break;
                     }
 
@@ -3955,7 +3915,7 @@ namespace System.Text.RegularExpressions
                         Bge(l1);
                         Rightchar();
                         Ldc('\n');
-                        BneFar(_backtrack);
+                        Bne(_backtrack);
                         break;
                     }
 
@@ -3970,11 +3930,11 @@ namespace System.Text.RegularExpressions
                     Callvirt(s_isBoundaryMethod);
                     if (Code() == RegexCode.Boundary)
                     {
-                        BrfalseFar(_backtrack);
+                        Brfalse(_backtrack);
                     }
                     else
                     {
-                        BrtrueFar(_backtrack);
+                        Brtrue(_backtrack);
                     }
                     break;
 
@@ -3989,11 +3949,11 @@ namespace System.Text.RegularExpressions
                     Callvirt(s_isECMABoundaryMethod);
                     if (Code() == RegexCode.ECMABoundary)
                     {
-                        BrfalseFar(_backtrack);
+                        Brfalse(_backtrack);
                     }
                     else
                     {
-                        BrtrueFar(_backtrack);
+                        Brtrue(_backtrack);
                     }
                     break;
 
@@ -4002,7 +3962,7 @@ namespace System.Text.RegularExpressions
                     //:    break Backward;
                     Ldloc(_runtextposLocal!);
                     Ldloc(_runtextbegLocal!);
-                    BgtFar(_backtrack);
+                    Bgt(_backtrack);
                     break;
 
                 case RegexCode.Start:
@@ -4010,7 +3970,7 @@ namespace System.Text.RegularExpressions
                     //:    break Backward;
                     Ldloc(_runtextposLocal!);
                     Ldthisfld(s_runtextstartField);
-                    BneFar(_backtrack);
+                    Bne(_backtrack);
                     break;
 
                 case RegexCode.EndZ:
@@ -4020,13 +3980,13 @@ namespace System.Text.RegularExpressions
                     Ldloc(_runtextendLocal!);
                     Ldc(1);
                     Sub();
-                    BltFar(_backtrack);
+                    Blt(_backtrack);
                     Ldloc(_runtextposLocal!);
                     Ldloc(_runtextendLocal!);
                     Bge(_labels![NextCodepos()]);
                     Rightchar();
                     Ldc('\n');
-                    BneFar(_backtrack);
+                    Bne(_backtrack);
                     break;
 
                 case RegexCode.End:
@@ -4034,7 +3994,7 @@ namespace System.Text.RegularExpressions
                     //:    break Backward;
                     Ldloc(_runtextposLocal!);
                     Ldloc(_runtextendLocal!);
-                    BltFar(_backtrack);
+                    Blt(_backtrack);
                     break;
 
                 case RegexCode.One:
@@ -4060,20 +4020,20 @@ namespace System.Text.RegularExpressions
                     if (!IsRightToLeft())
                     {
                         Ldloc(_runtextendLocal!);
-                        BgeFar(_backtrack);
+                        Bge(_backtrack);
                         Rightcharnext();
                     }
                     else
                     {
                         Ldloc(_runtextbegLocal!);
-                        BleFar(_backtrack);
+                        Ble(_backtrack);
                         Leftcharnext();
                     }
 
                     if (Code() == RegexCode.Set)
                     {
                         EmitMatchCharacterClass(_strings![Operand(0)], IsCaseInsensitive(), charInClassLocal);
-                        BrfalseFar(_backtrack);
+                        Brfalse(_backtrack);
                     }
                     else
                     {
@@ -4085,11 +4045,11 @@ namespace System.Text.RegularExpressions
                         Ldc(Operand(0));
                         if (Code() == RegexCode.One)
                         {
-                            BneFar(_backtrack);
+                            Bne(_backtrack);
                         }
                         else
                         {
-                            BeqFar(_backtrack);
+                            Beq(_backtrack);
                         }
                     }
                     break;
@@ -4110,7 +4070,7 @@ namespace System.Text.RegularExpressions
                         Ldloc(_runtextendLocal!);
                         Ldloc(_runtextposLocal!);
                         Sub();
-                        BgtFar(_backtrack);
+                        Bgt(_backtrack);
 
                         // unroll the string
                         for (int i = 0; i < str.Length; i++)
@@ -4129,7 +4089,7 @@ namespace System.Text.RegularExpressions
                             }
 
                             Ldc(str[i]);
-                            BneFar(_backtrack);
+                            Bne(_backtrack);
                         }
 
                         Ldloc(_runtextposLocal!);
@@ -4155,7 +4115,7 @@ namespace System.Text.RegularExpressions
                         Ldloc(_runtextposLocal!);
                         Ldloc(_runtextbegLocal!);
                         Sub();
-                        BgtFar(_backtrack);
+                        Bgt(_backtrack);
 
                         // unroll the string
                         for (int i = str.Length; i > 0;)
@@ -4171,7 +4131,7 @@ namespace System.Text.RegularExpressions
                                 CallToLower();
                             }
                             Ldc(str[i]);
-                            BneFar(_backtrack);
+                            Bne(_backtrack);
                         }
 
                         Ldloc(_runtextposLocal!);
@@ -4212,7 +4172,7 @@ namespace System.Text.RegularExpressions
                         }
                         else
                         {
-                            BrfalseFar(_backtrack); // !IsMatched() -> back
+                            Brfalse(_backtrack); // !IsMatched() -> back
                         }
 
                         Ldthis();
@@ -4231,7 +4191,7 @@ namespace System.Text.RegularExpressions
                             Ldloc(_runtextbegLocal!);
                         }
                         Sub();
-                        BgtFar(_backtrack);         // Matchlength() > Rightchars() -> back
+                        Bgt(_backtrack);         // Matchlength() > Rightchars() -> back
 
                         Ldthis();
                         Ldc(Operand(0));
@@ -4332,7 +4292,7 @@ namespace System.Text.RegularExpressions
                             Ldloc(_runtextbegLocal!);
                         }
                         Sub();
-                        BgtFar(_backtrack);         // Matchlength() > Rightchars() -> back
+                        Bgt(_backtrack);         // Matchlength() > Rightchars() -> back
 
                         Ldloc(_runtextposLocal!);
                         Ldc(c);
@@ -4368,7 +4328,7 @@ namespace System.Text.RegularExpressions
                         {
                             EmitTimeoutCheck();
                             EmitMatchCharacterClass(_strings![Operand(0)], IsCaseInsensitive(), charInClassLocal);
-                            BrfalseFar(_backtrack);
+                            Brfalse(_backtrack);
                         }
                         else
                         {
@@ -4380,23 +4340,16 @@ namespace System.Text.RegularExpressions
                             Ldc(Operand(0));
                             if (Code() == RegexCode.Onerep)
                             {
-                                BneFar(_backtrack);
+                                Bne(_backtrack);
                             }
                             else
                             {
-                                BeqFar(_backtrack);
+                                Beq(_backtrack);
                             }
                         }
                         Ldloc(lenLocal);
                         Ldc(0);
-                        if (Code() == RegexCode.Setrep)
-                        {
-                            BgtFar(l1);
-                        }
-                        else
-                        {
-                            Bgt(l1);
-                        }
+                        Bgt(l1);
                         break;
                     }
 
@@ -4509,7 +4462,7 @@ namespace System.Text.RegularExpressions
                             Stloc(_runtextposLocal!);
                             Ldc(0);
                             Stloc(iLocal);
-                            BrFar(loopEnd);
+                            Br(loopEnd);
 
                             // charFound:
                             // runtextpos += i;
@@ -4524,7 +4477,7 @@ namespace System.Text.RegularExpressions
                             Ldloc(iLocal);
                             Sub();
                             Stloc(iLocal);
-                            BrFar(loopEnd);
+                            Br(loopEnd);
                         }
                         else if ((Code() == RegexCode.Setloop || Code() == RegexCode.Setloopatomic) &&
                             !IsRightToLeft() &&
@@ -4571,7 +4524,7 @@ namespace System.Text.RegularExpressions
                             Stloc(_runtextposLocal!);
                             Ldc(0);
                             Stloc(iLocal);
-                            BrFar(loopEnd);
+                            Br(loopEnd);
 
                             // charFound:
                             // runtextpos += i;
@@ -4586,7 +4539,7 @@ namespace System.Text.RegularExpressions
                             Ldloc(iLocal);
                             Sub();
                             Stloc(iLocal);
-                            BrFar(loopEnd);
+                            Br(loopEnd);
                         }
                         else if ((Code() == RegexCode.Setloop || Code() == RegexCode.Setloopatomic) &&
                             !IsRightToLeft() &&
@@ -4602,7 +4555,7 @@ namespace System.Text.RegularExpressions
                             Ldloc(lenLocal);
                             Add();
                             Stloc(_runtextposLocal!);
-                            BrFar(loopEnd);
+                            Br(loopEnd);
                         }
 
                         else
@@ -4622,14 +4575,7 @@ namespace System.Text.RegularExpressions
                             Dup();
                             Stloc(iLocal);
                             Ldc(0);
-                            if (Code() == RegexCode.Setloop || Code() == RegexCode.Setloopatomic)
-                            {
-                                BleFar(loopEnd);
-                            }
-                            else
-                            {
-                                Ble(loopEnd);
-                            }
+                            Ble(loopEnd);
 
                             if (IsRightToLeft())
                             {
@@ -4644,7 +4590,7 @@ namespace System.Text.RegularExpressions
                             {
                                 EmitTimeoutCheck();
                                 EmitMatchCharacterClass(_strings![Operand(0)], IsCaseInsensitive(), charInClassLocal);
-                                BrtrueFar(loopCondition);
+                                Brtrue(loopCondition);
                             }
                             else
                             {
@@ -4725,7 +4671,7 @@ namespace System.Text.RegularExpressions
                     Stloc(_temp1Local!);
                     Ldloc(_temp1Local!);
                     Ldc(0);
-                    BleFar(AdvanceLabel());
+                    Ble(AdvanceLabel());
                     ReadyPushTrack();
                     Ldloc(_temp1Local!);
                     Ldc(1);
@@ -4841,7 +4787,7 @@ namespace System.Text.RegularExpressions
                     if (Code() == RegexCode.Setlazy)
                     {
                         EmitMatchCharacterClass(_strings![Operand(0)], IsCaseInsensitive(), charInClassLocal);
-                        BrfalseFar(_backtrack);
+                        Brfalse(_backtrack);
                     }
                     else
                     {
@@ -4853,17 +4799,17 @@ namespace System.Text.RegularExpressions
                         Ldc(Operand(0));
                         if (Code() == RegexCode.Onelazy)
                         {
-                            BneFar(_backtrack);
+                            Bne(_backtrack);
                         }
                         else
                         {
-                            BeqFar(_backtrack);
+                            Beq(_backtrack);
                         }
                     }
 
                     Ldloc(_temp2Local!);
                     Ldc(0);
-                    BleFar(AdvanceLabel());
+                    Ble(AdvanceLabel());
                     ReadyPushTrack();
                     Ldloc(_temp2Local!);
                     Ldc(1);
