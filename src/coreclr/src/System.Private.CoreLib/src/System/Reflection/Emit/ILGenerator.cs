@@ -297,6 +297,22 @@ namespace System.Reflection.Emit
             return m_labelList[index];
         }
 
+        private bool CanUseShortFormInBranches(Label lbl)
+        {
+            int index = lbl.GetLabelValue();
+
+            if (index < 0 || index >= m_labelCount)
+                throw new ArgumentException(SR.Argument_BadLabel);
+
+            // We don't know yet if the short form can be used for this label.
+            // TODO(lpereira): Revisit this branch whenever this label is marked.
+            if (m_labelList[index] < 0)
+                return false;
+
+            var distance = m_length - m_labelList[index];
+            return distance >= -128 && distance <= 127;
+        }
+
         private void AddFixup(Label lbl, int pos, int instSize)
         {
             // Notes the label, position, and instruction size of a new fixup.  Expands
@@ -698,6 +714,32 @@ namespace System.Reflection.Emit
                 AddFixup(label, m_length, 4);
                 m_length += 4;
             }
+        }
+
+        public virtual void Emit(OpCode opcode, Label label, bool useShortFormIfPossible)
+        {
+            if (useShortFormIfPossible && CanUseShortFormInBranches(label))
+            {
+                opcode = opcode switch {
+                    OpCodes.Br => OpCodes.Br_S,
+                    OpCodes.Beq => OpCodes.Beq_S,
+                    OpCodes.Bge => OpCodes.Bge_S,
+                    OpCodes.Bgt => OpCodes.Bgt_S,
+                    OpCodes.Ble => OpCodes.Ble_S,
+                    OpCodes.Blt => OpCodes.Blt_S,
+                    OpCodes.Bgt_Un => OpCodes.Bgt_Un_S,
+                    OpCodes.Bge_Un => OpCodes.Bge_Un_S,
+                    OpCodes.Bne_Un => OpCodes.Bne_Un_S,
+                    OpCodes.Ble_Un => OpCodes.Ble_Un_S,
+                    OpCodes.Blt_Un => OpCodes.Blt_Un_S,
+                    OpCodes.Bne => OpCodes.Bne_S,
+                    OpCodes.Brtrue => OpCodes.Brtrue_S,
+                    OpCodes.Brfalse => Opcodes.Brfalse_S,
+                    _ => opcode,
+                };
+            }
+
+            Emit(opcode, label);
         }
 
         public virtual void Emit(OpCode opcode, Label[] labels)
